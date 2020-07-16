@@ -13,6 +13,17 @@ Auto_EDA is a python library that automates common tasks in your exploratory dat
 
 :warning: Decision Tree visualizer requires [graphviz](https://github.com/parrt/dtreeviz).
 
+**Install Via GitHub**
+
+```sh
+> pip install git+https://github.com/GrandPurpleOcelot/Auto-EDA 
+```
+## Usage
+
+```python
+from auto_eda import *;
+```
+
 ## Table of Contents
 
 ### Descriptive Statistics
