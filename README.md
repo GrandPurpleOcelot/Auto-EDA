@@ -1,3 +1,8 @@
+<div align="center">
+  <img src="images/Auto_EDA.png" alt="auto_eda_logo"/>
+</div>
+
+
 ## Introduction
 
 Throughout my data science journey, I have learned that it is a good practice to understand the data first and try to gather as many insights from it. Exploratory Data Analysis (EDA) is all about making sense of data in hand, before getting dirty with machine learning and sophiticated algorithm. 
