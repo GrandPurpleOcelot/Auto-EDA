@@ -1,18 +1,34 @@
-# Introduction
+## Introduction
 
 Throughout my data science journey, I have learned that it is a good practice to understand the data first and try to gather as many insights from it. Exploratory Data Analysis (EDA) is all about making sense of data in hand, before getting dirty with machine learning and sophiticated algorithm. 
 
 While there are plenty of Python libraries that can help create beautiful and complex visualizations, I often find myself starting with the most simplistic analyses: count plot, histogram, scatter plot, boxplot, etc. This initial EDA workflow is very similar for each new data set. But unfortunately, they are tedious. Converting to correct data types, selecting the right variable type for the right plot, itterate through all possible variable combinations, adjusting plot asthetic and labels, etc. These are the tasks I would love to do... once. As someone that does not find great joy in completing repetitive tasks, I set out to build a tool that allow me to me as lazy as possible.
 
-# Description
+## Description
 Auto_EDA is a python library that automates common tasks in your exploratory data analysis. This includes missing values visualization, missing values handling, variable types handling, predictive modeling and a variety of univariate and bivariate graphs. The goal is to provide a fast and effective tool for discovering insights, so you can quickly move on machine learning model.
 
+## Installation
 
-# Table of Contents
+:warning: Auto_EDA is only compatible with **Python 3**.
 
-## Descriptive Statistics
+:warning: Decision Tree visualizer requires [graphviz](https://github.com/parrt/dtreeviz).
 
-###  Dataset Overview
+**Install Via GitHub**
+
+```sh
+> pip install git+https://github.com/GrandPurpleOcelot/Auto-EDA 
+```
+## Usage
+
+```python
+from auto_eda import *;
+```
+
+## Table of Contents
+
+### Descriptive Statistics
+
+####  Dataset Overview
 
 1. Number of variables
 
@@ -20,13 +36,13 @@ Auto_EDA is a python library that automates common tasks in your exploratory dat
 
 3. Memory usage
 
-## Missing Values
+### Missing Values
 
 1. Visualize missing values using heatmap
 
 2. Suggestions for handling missing value
 
-## Variable Types
+### Variable Types
 
 1. Print out current data types from Pandas
 
@@ -40,9 +56,9 @@ Auto_EDA is a python library that automates common tasks in your exploratory dat
  
  * Maximum cardinality (number of unique == number of observations) -> remove
 
-## Visualization
+### Visualization
 
-### Univariate plots
+#### Univariate plots
 
 1. Histogram (for numerical data)
 
@@ -50,7 +66,7 @@ Auto_EDA is a python library that automates common tasks in your exploratory dat
 
 3. World cloud (for text data)
 
-### Bivariate plots 
+#### Bivariate plots 
 
 User can specify a categorical column for grouping. 
 
