@@ -9,7 +9,9 @@ Auto_EDA is a python library that automates common tasks in your exploratory dat
 
 ## Installation
 
-:warning: Prince is only compatible with **Python 3**.
+:warning: Auto_EDA is only compatible with **Python 3**.
+
+:warning: Decision Tree visualizer requires [graphviz](https://github.com/parrt/dtreeviz).
 
 ## Table of Contents
 
