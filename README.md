@@ -206,7 +206,26 @@ User can specify a target variable for classification/regression task using Clas
 
 1. Classification Report (train on 75% of data, test on 25%)
 
+```python
+report.tree_model()
+
+Classification Report on 25% of Testing Data:
+              precision    recall  f1-score   support
+
+ has disease       0.85      0.85      0.85        41
+  no disease       0.83      0.83      0.83        35
+
+    accuracy                           0.84        76
+   macro avg       0.84      0.84      0.84        76
+weighted avg       0.84      0.84      0.84        76
+
+```
+
 2. Bar chart of relative feature importance
+
+<div align="center">
+  <img src="images/tree_model.png" />
+</div>
 
 3. Decision tree visualization with Dtreeviz
 
