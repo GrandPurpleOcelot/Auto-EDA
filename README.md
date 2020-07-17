@@ -155,7 +155,7 @@ report.check_data_type()
   <img src="images/check_data_type.png" />
 </div>
 
-- Type conversion suggestions: 
+**Type conversion suggestions:**
 
  * String datetime -> datetime
  
