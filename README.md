@@ -84,13 +84,43 @@ get_samples() returns number of variables, observations, and memory usage.
 
 1. Visualize missing values using heatmap
 
-2. Suggestions for handling missing value
+```python
+report.get_missings(missing_tag=-200)
+```
+
+<div align="center">
+  <img src="images/get_missings.png" />
+</div>
+
+<div align="center">
+  <img src="images/get_missings1.png" />
+</div>
+
+<div align="center">
+  <img src="images/get_missings2.png" />
+</div>
+
+2. Handling missing values
+
+```python
+>>> report.handle_missings(strategy = 'deletion', drop_threshold = 0.5)
+
+Dropped columns: ['NMHC(GT)']
+Number of dropped rows: 2416 --> 25.8% of rows removed
+```
 
 ### Variable Types
 
 1. Print out current data types from Pandas
 
-2. Type conversion suggestions: 
+```python
+report.check_data_type()
+```
+<div align="center">
+  <img src="images/check_data_type.png" />
+</div>
+
+- Type conversion suggestions: 
 
  * String datetime -> datetime
  
@@ -99,6 +129,14 @@ get_samples() returns number of variables, observations, and memory usage.
  * String float -> float
  
  * Maximum cardinality (number of unique == number of observations) -> remove
+ 
+Execute the suggested type conversions:
+
+```python
+>>> report.change_data_type()
+
+Column Datetime converts to datetime
+```
 
 ### Visualization
 
