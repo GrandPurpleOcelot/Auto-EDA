@@ -143,9 +143,20 @@ report.correlation()
 ```
 
 <div align="center">
-  <img src="images/count_plots.png" />
+  <img src="images/correlation.png" />
 </div>
 
+<div align="center">
+  <img src="images/correlation1.png" />
+</div>
+
+<div align="center">
+  <img src="images/correlation2.png" />
+</div>
+
+<div align="center">
+  <img src="images/correlation3.png" />
+</div>
     * Principal Component Analysis
     
     ```python
