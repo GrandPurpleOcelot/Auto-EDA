@@ -34,7 +34,8 @@ from auto_eda import *;
 - [Table of contents](#table-of-contents)
 - [Installation](#installation)
 - [Dataset Overview](#dataset-overview)
-- [Missing Values](#Missing-Values)
+- [Missing Values Handling](#Missing-Values)
+- [Variable Types Handling](#Variable Types)
 ### Descriptive Statistics
 
 ####  Dataset Overview
