@@ -121,6 +121,7 @@ class auto_eda():
         self.numeric_cols = self.df.select_dtypes(include = NUMERICS_TYPES).columns.tolist()
         self.cat_cols = self.df.select_dtypes(include = CATEGORICAL_TYPES).columns.tolist()
         self.datetime_cols = self.df.select_dtypes(include = np.datetime64).columns.tolist()
+        self.high_cardinality_cols = None
         self.other_cols = self.df.select_dtypes(exclude = NUMERICS_TYPES + CATEGORICAL_TYPES).columns.tolist()
         self.encoder = None
         
@@ -170,20 +171,17 @@ Use argument missing_tag for encoded missing values''')
             msno.dendrogram(self.df)
             plt.title('Missing Values Dendrogram',fontsize=25)
         
-    def handle_missings(self, strategy = None):
+    def handle_missings(self, strategy = None, drop_threshold = 0.7):
         '''
         PLEASE RUN get_missings() FIRST TO IDENTIFY MISSINGS.
         
-        Handling missing values strategies:
+        3 Strategies:
         
-        deletion: drop variables with > 70% missing and
-        remove observations that contain at least 1 missing value.
+        'deletion': drop variables with > 70% missing (or a different threshold using argument 'drop_threshold') and remove observations that contain at least 1 missing value.
         
-        encode (Encoding imputation): for numerical variable, encoding missing entries as -999. 
-        For categorical variable, encoding missing entries as string "unknown"
+        'encode'(Encoding imputation): for numerical variable, encoding missing entries as -999. For categorical variable, encoding missing entries as string "unknown"
         
-        mean_mode (Mean/mode imputation): for numerial variable, impute the missing entries with the mean, 
-        For categorical variable, impute the missing entries with the mode
+        'mean_mode'(Mean/mode imputation): for numerial variable, impute the missing entries with the mean. For categorical variable, impute the missing entries with the mode
         
         '''
         strategies = ['deletion', 'encode', 'mean_mode']
@@ -193,9 +191,9 @@ Use argument missing_tag for encoded missing values''')
             print('No strategy selected, please specify one of the following deletion, encode, or mean_mode')
         else:
             if strategy == 'deletion':
-                # drop variable with > 70% missing
+                # drop column if missing more than threshold (default: > 70% msissing)
                 percent_missing = self.df.isnull().sum() * 100 / len(self.df)
-                drop_list = percent_missing[percent_missing > 70].index.tolist()
+                drop_list = percent_missing[percent_missing > drop_threshold].index.tolist()
                 self.df.drop(drop_list, axis = 1, inplace = True) 
                 
                 self.numeric_cols = self.df.select_dtypes(include = NUMERICS_TYPES).columns.tolist()
@@ -210,8 +208,8 @@ Use argument missing_tag for encoded missing values''')
             
             elif strategy == 'encode':
                 # encoding missing numerics as -999, categories as 'unknown'
-                numerics_replaced = (len(self.df[self.numric_cols]) - self.df[self.numric_cols].count()).sum()
-                self.df[self.numric_cols] = self.df[self.numric_cols].fillna(-999)
+                numerics_replaced = (len(self.df[self.numeric_cols]) - self.df[self.numeric_cols].count()).sum()
+                self.df[self.numeric_cols] = self.df[self.numeric_cols].fillna(-999)
                 
                 cats_replaced = (len(self.df[self.cat_cols]) - self.df[self.cat_cols].count()).sum()
                 self.df[self.cat_cols] = self.df[self.cat_cols].fillna('unknown')
@@ -220,8 +218,8 @@ Use argument missing_tag for encoded missing values''')
                 
             elif strategy == 'mean_mode':
                 # impute missing numerics with mean value
-                numerics_replaced = (len(self.df[self.numric_cols]) - self.df[self.numric_cols].count()).sum()
-                self.df[self.numric_cols] = self.df[self.numric_cols].fillna(self.df[self.numric_cols].mean())
+                numerics_replaced = (len(self.df[self.numeric_cols]) - self.df[self.numeric_cols].count()).sum()
+                self.df[self.numeric_cols] = self.df[self.numeric_cols].fillna(self.df[self.numeric_cols].mean())
                 
                 # impute missing categories with mode value
                 cats_replaced = (len(self.df[self.cat_cols]) - self.df[self.cat_cols].count()).sum()
@@ -255,7 +253,7 @@ Use argument missing_tag for encoded missing values''')
         # suggest better data type
         data_types['Suggest'] = np.where((data_types['Is_datetime'] == 'yes') & (data_types['Type'] == 'object'), 'converts to datetime',
                                          (np.where((data_types['Warning'] == 'low_cardinality') & (data_types['Type'].apply(is_numeric_dtype)), 'converts to object',
-                                          np.where((data_types['String_number'] == 'yes') & (data_types['Type'] == np.float) & (data_types['Type'] == 'object'), 'converts to numeric', 'None'))))
+                                          np.where((data_types['String_number'] == 'yes') & (data_types['Warning'] == 'None') & (data_types['Type'] == 'object'), 'converts to numeric', 'None'))))
         
         return data_types
                 
@@ -270,11 +268,17 @@ Use argument missing_tag for encoded missing values''')
         if alter_columns == 'all':
             columns_to_change = type_table[type_table['Suggest'] != 'None'][['Column', 'Suggest']]
             for index, row in columns_to_change.iterrows():
-                self.df[row['Column']] = self.df[row['Column']].apply(conversion_commands[row['Suggest']])
-                print('Column {} {}'.format(row['Column'],row['Suggest']))
-                
+                try:
+                    self.df[row['Column']] = self.df[row['Column']].apply(conversion_commands[row['Suggest']])
+                    print('Column {} {}'.format(row['Column'],row['Suggest']))
+                except ValueError:
+                    print('Column {} failed to {}. There is more than 1 type of data in this column'.format(row['Column'],row['Suggest']))
+
+            self.high_cardinality_cols = type_table[(type_table['Cardinality'] > 30) & (type_table['Type'] == 'object')]['Column'].tolist()   
             self.numeric_cols = self.df.select_dtypes(include = NUMERICS_TYPES).columns.tolist()
+            # remove high_cardinality_cols from cat_cols
             self.cat_cols = self.df.select_dtypes(include = CATEGORICAL_TYPES).columns.tolist()
+            self.cat_cols = [i for i in self.cat_cols if i not in self.high_cardinality_cols]
             self.datetime_cols = self.df.select_dtypes(include = np.datetime64).columns.tolist()
             
         else:
@@ -286,7 +290,7 @@ Use argument missing_tag for encoded missing values''')
         total_cols = 2
         total_rows = int(np.ceil(num_plots/total_cols)) 
         fig, axs = plt.subplots(nrows=total_rows, ncols=total_cols,
-                                figsize=(7*total_cols, 7*total_rows), constrained_layout=True)
+                                figsize=(7*total_cols, 7*total_rows), constrained_layout=True, squeeze=False)
         fig.suptitle('Histograms of Numerical Variables', fontsize = 20)
         for i, col in enumerate(self.numeric_cols):
             row = i//total_cols
@@ -305,7 +309,7 @@ Use argument missing_tag for encoded missing values''')
             total_cols = 2
             total_rows = int(np.ceil(num_plots/total_cols))
             fig, axs = plt.subplots(nrows=total_rows, ncols=total_cols,
-                                    figsize=(7*total_cols, 7*total_rows), constrained_layout=True)
+                                    figsize=(7*total_cols, 7*total_rows), constrained_layout=True, squeeze=False)
             fig.suptitle('Frequency Plot of Categorical Variables', fontsize = 20)
             for i, col in enumerate(self.cat_cols):
                 row = i//total_cols
@@ -318,6 +322,10 @@ Use argument missing_tag for encoded missing values''')
                 
                 for p in cplot.patches:
                     cplot.annotate(int(p.get_height()), (p.get_x() + p.get_width() / 2., p.get_height()), ha = 'center', va = 'center', xytext = (0, 10), textcoords = 'offset points')
+
+            if len(self.high_cardinality_cols) > 0:
+                print('Some categorical columns have high cardinality: {}'.format(self.high_cardinality_cols)) 
+                print('Consider a different visualization method for these columns.')
                 
     def word_cloud(self):
         pass
@@ -337,33 +345,36 @@ Use argument missing_tag for encoded missing values''')
         if target is None:
             target = self.target_variable
         
-        num_cols = self.numeric_cols
-        if len(num_cols) > 10 or show_all == True:
-            corr = self.df[num_cols].corr()
-            cmap=sns.diverging_palette(5, 250, as_cmap=True)
+        num_cols = len(self.numeric_cols)
+        if num_cols < 2:
+                print("Correlation plots requires at least 2 numerical variables")
+        else:
+            if num_cols > 10 or show_all == True:
+                corr = self.df[num_cols].corr()
+                cmap=sns.diverging_palette(5, 250, as_cmap=True)
 
-            style_table = corr.style.background_gradient(cmap = cmap, axis=1)\
-                .set_properties(**{'max-width': '60px', 'font-size': '10pt'})\
-                .set_precision(2)
-            
-            display(style_table)
-            
-            cluster_plot = sns.clustermap(corr, cmap = cmap)
-            cluster_plot.fig.suptitle("Hierarchical Structure in Correlation Matrix", y=1.05, fontsize=20)
-            txt = '''
-            
-            Hint: Similarly correlated variables are grouped together (increase/decrease together).'''
-            plt.figtext(0.5, 0.01, txt, wrap=True, fontsize=12, horizontalalignment='center')
-            
-        if len(num_cols) <= 10 or show_all == True:    
-            pplot = sns.pairplot(self.df[num_cols], corner=True, diag_kind = 'kde') # pplot = pairplot
-            pplot.map_lower(corrfunc)
-            pplot.fig.suptitle("Pearson Correlation Matrix", y=1.05, fontsize=20)
+                style_table = corr.style.background_gradient(cmap = cmap, axis=1)\
+                    .set_properties(**{'max-width': '60px', 'font-size': '10pt'})\
+                    .set_precision(2)
+                
+                display(style_table)
+                
+                cluster_plot = sns.clustermap(corr, cmap = cmap)
+                cluster_plot.fig.suptitle("Hierarchical Structure in Correlation Matrix", y=1.05, fontsize=20)
+                txt = '''
+                
+                Hint: Similarly correlated variables are grouped together (increase/decrease together).'''
+                plt.figtext(0.5, 0.01, txt, wrap=True, fontsize=12, horizontalalignment='center')
+                
+            if num_cols <= 10 or show_all == True:    
+                pplot = sns.pairplot(self.df[num_cols], corner=True, diag_kind = 'kde') # pplot = pairplot
+                pplot.map_lower(corrfunc)
+                pplot.fig.suptitle("Pearson Correlation Matrix", y=1.05, fontsize=20)
 
-            if target != None and self.df[target].dtype in CATEGORICAL_TYPES:
-                num_cols_with_target = self.numeric_cols + [target]
-                pplot2 = sns.pairplot(self.df[num_cols_with_target], corner=True, hue = target)
-                pplot2.fig.suptitle("Grouped by: " + target, y=1.05, fontsize=20)
+                if target != None and self.df[target].dtype in CATEGORICAL_TYPES:
+                    num_cols_with_target = self.numeric_cols + [target]
+                    pplot2 = sns.pairplot(self.df[num_cols_with_target], corner=True, hue = target)
+                    pplot2.fig.suptitle("Grouped by: " + target, y=1.05, fontsize=20)
     
     def pca(self):
         '''
@@ -400,7 +411,7 @@ Use argument missing_tag for encoded missing values''')
             total_cols = 2
             total_rows = int(np.ceil(num_plots/total_cols))
             fig, axs = plt.subplots(nrows=total_rows, ncols=total_cols,
-                                    figsize=(7*total_cols, 5*total_rows), constrained_layout=True)
+                                    figsize=(7*total_cols, 5*total_rows), constrained_layout=True, squeeze=False)
             fig.suptitle('Boxplots', fontsize = 20)
             for i, col in enumerate(self.numeric_cols):
                 row = i//total_cols
@@ -424,7 +435,7 @@ Use argument missing_tag for encoded missing values''')
                 total_cols = 2
                 total_rows = int(np.ceil(num_plots/total_cols))
                 fig, axs = plt.subplots(nrows=total_rows, ncols=total_cols,
-                                        figsize=(7*total_cols, 5*total_rows), constrained_layout=True)
+                                        figsize=(7*total_cols, 5*total_rows), constrained_layout=True, squeeze=False)
                 fig.suptitle('Categorical Frequency Plots of: ' + target, fontsize = 20)
                 # exclude target variable
                 non_target_list = [i for i in self.cat_cols if i != target]
@@ -468,7 +479,7 @@ Use argument missing_tag for encoded missing values''')
                 total_cols = 2
                 total_rows = int(np.ceil(num_plots/total_cols))
                 fig, axs = plt.subplots(nrows=total_rows, ncols=total_cols,
-                                        figsize=(7*total_cols, 7*total_rows), constrained_layout=True)
+                                        figsize=(7*total_cols, 7*total_rows), constrained_layout=True, squeeze=False)
                 fig.suptitle('Correspondence Analysis for column: ' + target, fontsize = 20)
                 # exclude target variable
                 non_target_list = [i for i in self.cat_cols if i != target]           
@@ -527,7 +538,7 @@ Use argument missing_tag for encoded missing values''')
             labeled_housing = encoded_df.apply(lambda x: encoder_dict[x.name].fit_transform(x))
             self.encoder = encoder_dict
 
-            objList = self.cat_cols
+            objList = self.cat_cols + self.high_cardinality_cols
 
             le = LabelEncoder()
 
