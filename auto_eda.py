@@ -380,20 +380,16 @@ Use argument missing_tag for encoded missing values''')
                 
                 Hint: Similarly correlated variables are grouped together (increase/decrease together).'''
                 plt.figtext(0.5, 0.01, txt, wrap=True, fontsize=12, horizontalalignment='center')
-
-                plt.savefig("correlation1.png")
                 
             if num_cols <= 10 or show_all == True:    
                 pplot = sns.pairplot(self.df[self.numeric_cols], corner=True, diag_kind = 'kde') # pplot = pairplot
                 pplot.map_lower(corrfunc)
                 pplot.fig.suptitle("Pearson Correlation Matrix", y=1.05, fontsize=20)
-                plt.savefig("correlation2.png")
 
                 if target != None and self.df[target].dtype in CATEGORICAL_TYPES:
                     num_cols_with_target = self.numeric_cols + [target]
                     pplot2 = sns.pairplot(self.df[num_cols_with_target], corner=True, hue = target)
                     pplot2.fig.suptitle("Grouped by: " + target, y=1.05, fontsize=20)
-                    plt.savefig("correlation3.png")
     
     def pca(self):
         '''
