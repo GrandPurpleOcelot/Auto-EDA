@@ -37,6 +37,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import classification_report
 from sklearn import metrics
+from matplotlib import colors
 
 # set seaborn theme
 sns.set()
@@ -110,6 +111,14 @@ def feature_importance_plot(features = None, importances = None):
 
 NUMERICS_TYPES = ['int', 'float', 'int32', 'float32', 'int64', 'float64']
 CATEGORICAL_TYPES = [np.object]
+
+def background_gradient(s, m, M, cmap='PuBu', low=0, high=0):
+    rng = M - m
+    norm = colors.Normalize(m - (rng * low),
+                            M + (rng * high))
+    normed = norm(s.values)
+    c = [colors.rgb2hex(x) for x in plt.cm.get_cmap(cmap)(normed)]
+    return ['background-color: %s' % color for color in c]
 
 class auto_eda():
     def __init__(self, df, target_variable = None):
@@ -191,9 +200,9 @@ Use argument missing_tag for encoded missing values''')
             print('No strategy selected, please specify one of the following deletion, encode, or mean_mode')
         else:
             if strategy == 'deletion':
-                # drop column if missing more than threshold (default: > 70% msissing)
-                percent_missing = self.df.isnull().sum() * 100 / len(self.df)
-                drop_list = percent_missing[percent_missing > drop_threshold].index.tolist()
+                # drop column if missing more than threshold (default: > 70% missing)
+                fraction_missing = self.df.isnull().sum() / len(self.df)
+                drop_list = fraction_missing[fraction_missing > drop_threshold].index.tolist()
                 self.df.drop(drop_list, axis = 1, inplace = True) 
                 
                 self.numeric_cols = self.df.select_dtypes(include = NUMERICS_TYPES).columns.tolist()
@@ -350,16 +359,22 @@ Use argument missing_tag for encoded missing values''')
                 print("Correlation plots requires at least 2 numerical variables")
         else:
             if num_cols > 10 or show_all == True:
-                corr = self.df[num_cols].corr()
+                corr = self.df[self.numeric_cols].corr()
                 cmap=sns.diverging_palette(5, 250, as_cmap=True)
 
-                style_table = corr.style.background_gradient(cmap = cmap, axis=1)\
-                    .set_properties(**{'max-width': '60px', 'font-size': '10pt'})\
-                    .set_precision(2)
+                # style_table = corr.style.background_gradient(cmap = cmap, axis=1)\
+                #     .set_properties(**{'max-width': '60px', 'font-size': '10pt'})\
+                #     .set_precision(2)
+
+                even_range = np.max([np.abs(corr.values.min()), np.abs(corr.values.max())])
+                style_table = corr.style.apply(background_gradient,
+                                cmap=cmap,
+                                m=-even_range,
+                                M=even_range).set_precision(2)
                 
                 display(style_table)
                 
-                cluster_plot = sns.clustermap(corr, cmap = cmap)
+                cluster_plot = sns.clustermap(corr, cmap = cmap, vmin=-1, vmax=1)
                 cluster_plot.fig.suptitle("Hierarchical Structure in Correlation Matrix", y=1.05, fontsize=20)
                 txt = '''
                 
@@ -367,7 +382,7 @@ Use argument missing_tag for encoded missing values''')
                 plt.figtext(0.5, 0.01, txt, wrap=True, fontsize=12, horizontalalignment='center')
                 
             if num_cols <= 10 or show_all == True:    
-                pplot = sns.pairplot(self.df[num_cols], corner=True, diag_kind = 'kde') # pplot = pairplot
+                pplot = sns.pairplot(self.df[self.numeric_cols], corner=True, diag_kind = 'kde') # pplot = pairplot
                 pplot.map_lower(corrfunc)
                 pplot.fig.suptitle("Pearson Correlation Matrix", y=1.05, fontsize=20)
 
@@ -454,6 +469,7 @@ Use argument missing_tag for encoded missing values''')
                     catplot.set_ylim(0,100)
                     catplot.set_ylabel('')
                     catplot.set(yticklabels=[])
+                    catplot.set(xlabel=None)
 
                     for p in catplot.patches:
                         txt = str(p.get_height().round(1)) + '%'
