@@ -67,7 +67,7 @@ report.get_samples()
 get_samples() returns a df concatenated from head + random samples + tail of the dataset.
 
 <div align="center">
-  <img src="images/histogram.png" />
+  <img src="images/get_samples.png" />
 </div>
 
 ```python
@@ -106,21 +106,85 @@ get_samples() returns number of variables, observations, and memory usage.
 
 1. Histogram (for numerical data)
 
+```python
+report.histogram()
+```
+
+<div align="center">
+  <img src="images/histogram.png" />
+</div>
+
+The available parameters are:
+
+- `kde`: boolean (default = False).
+
 2. Count plot (for categorical data)
 
+```python
+report.count_plots()
+```
+
+<div align="center">
+  <img src="images/count_plots.png" />
+</div>
+
 3. World cloud (for text data)
+
+Development in progress...
 
 #### Bivariate plots 
 
 User can specify a categorical column for grouping. 
 
 1. Correlation plots (heat map and scatter plot): for numerical and numerical data
+
+```python
+report.correlation()
+```
+
+<div align="center">
+  <img src="images/count_plots.png" />
+</div>
+
     * Principal Component Analysis
+    
+    ```python
+    report.pca()
+    ```
+    
+   <div align="center">
+      <img src="images/pca.png" />
+    </div>
 
 2. Box plots: for numerical and categorical data
 
+```python
+report.boxplots()
+```
+
+<div align="center">
+  <img src="images/boxplots.png" />
+</div>
+
 3. Relative frequency plots: for categorical and categorical data
+
+```python
+report.cat_plots()
+```
+
+<div align="center">
+  <img src="images/cat_plots.png" />
+</div>
     * Correspondence Analysis
+    
+    ```python
+    report.correspondence_analysis()
+    ```
+    
+   <div align="center">
+      <img src="images/correspondence_analysis.png" />
+   </div>
+    
 
 4. Trend plot (connected scatterplot): if timeseries data is present
 
