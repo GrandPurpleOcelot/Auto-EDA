@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="images/Auto_EDA.png" alt="auto_eda_logo"/>
+  <img src="images/majora.png" alt="majora_logo"/>
 </div>
 
 
