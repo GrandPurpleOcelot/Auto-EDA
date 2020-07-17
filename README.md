@@ -5,12 +5,12 @@
 
 ## Introduction
 
-Throughout my data science journey, I have learned that it is a good practice to understand the data first and try to gather as many insights from it. Exploratory Data Analysis (EDA) is all about making sense of data in hand, before getting dirty with machine learning and sophiticated algorithm. 
+Throughout my data science journey, I have learned that it is a good practice to understand the data first and try to gather as many insights from it. Exploratory Data Analysis (EDA) is all about making sense of data in hand, before getting dirty with machine learning and sophisticated algorithm. 
 
-While there are plenty of Python libraries that can help create beautiful and complex visualizations, I often find myself starting with the most simplistic analyses: count plot, histogram, scatter plot, boxplot, etc. This initial EDA workflow is very similar for each new data set. But unfortunately, they are tedious. Converting to correct data types, selecting the right variable type for the right plot, itterate through all possible variable combinations, adjusting plot asthetic and labels, etc. These are the tasks I would love to do... once. As someone that does not find great joy in completing repetitive tasks, I set out to build a tool that allow me to me as lazy as possible.
+While there are plenty of Python libraries that can help create beautiful and complex visualizations, I often find myself starting with the most simplistic analyses: count plot, histogram, scatter plot, boxplot, etc. This initial EDA workflow is very similar for each new data set. But unfortunately, they are tedious. Converting to correct data types, selecting the right variable type for the right plot, iterate through all possible variable combinations, adjusting plot aesthetics and labels, etc. These are the tasks I would love to do... once. As someone that does not find great joy in completing repetitive tasks, I set out to build a tool that allows me to be as lazy as possible.
 
 ## Description
-Auto_EDA is a python library that automates common tasks in your exploratory data analysis. This includes missing values visualization, missing values handling, variable types handling, predictive modeling and a variety of univariate and bivariate graphs. The goal is to provide a fast and effective tool for discovering insights, so you can quickly move on machine learning model.
+Auto_EDA is a python library that automates common tasks in your exploratory data analysis. This includes missing values visualization, missing values handling, variable types handling, predictive modeling, and a variety of univariate and bivariate graphs. The goal is to provide a fast and effective tool for discovering insights, so you can quickly move on to the machine learning model.
 
 ### Features
 
@@ -103,7 +103,7 @@ get_samples() returns number of variables, observations, and memory usage.
 ### Identify Missing Values
 
 ```python
-report.get_missings(missing_tag=-200)
+report.get_missings(missing_tag= '?')
 ```
 
 <div align="center">
@@ -118,6 +118,11 @@ report.get_missings(missing_tag=-200)
   <img src="images/get_missings2.png" />
 </div>
 
+The available parameters are:
+
+- `missing_tag`: Sometimes missing values are denoted with a number or string (eg. '?'), enter the missing tag to replace them with NAs
+
+
 ### Handling missing values
 
 ```python
@@ -126,6 +131,18 @@ report.get_missings(missing_tag=-200)
 Dropped columns: ['NMHC(GT)']
 Number of dropped rows: 2416 --> 25.8% of rows removed
 ```
+
+The available parameters are:
+
+- `strategy`: select a strategy to handle missing data. Options: 'deletion', 'encode', 'mean_mode'
+
+'deletion': drop variables with > 70% missing (or a different threshold using argument 'drop_threshold') and remove observations that contain at least 1 missing value.
+
+'encode'(Encoding imputation): for numerical variable, encoding missing entries as -999. For categorical variable, encoding missing entries as string "unknown"
+
+'mean_mode'(Mean/mode imputation): for numerial variable, impute the missing entries with the mean. For categorical variable, impute the missing entries with the mode
+
+- `drop_threshold`: if 'deletion' strategy is selected, any column that have fraction of missing values exceed drop_threshold will be dropped. drop_threshold = 1 will keep all columns. Default drop_threshold = 0.7.
 
 ## Variable Types
 
@@ -194,8 +211,6 @@ Exploratory type: **text** data
 Development in progress...
 
 ### Bivariate Plots 
-
-User can specify a categorical column for grouping. 
 
 #### Correlation Plots
 
@@ -273,9 +288,17 @@ Exploratory type: **categorical** and **categorical** data
 
 Exploratory type: **timeseries** data
 
+```python
+report.timeseries_plots(grouper = 'M')
+```
+
 <div align="center">
   <img src="images/timeseries_plots.png" />
 </div>
+
+The available parameters are:
+
+- `grouper`: aggregate the timeseries with a time interval (default = 'W' for 1 week) using mean. This argument is used to reduce the datetime points we have to plot.
 
 ### Statistical Modeling
 
