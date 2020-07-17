@@ -12,6 +12,13 @@ While there are plenty of Python libraries that can help create beautiful and co
 ## Description
 Auto_EDA is a python library that automates common tasks in your exploratory data analysis. This includes missing values visualization, missing values handling, variable types handling, predictive modeling and a variety of univariate and bivariate graphs. The goal is to provide a fast and effective tool for discovering insights, so you can quickly move on machine learning model.
 
+### Features
+
+- Smart data type conversion
+- Automatic graph discovery
+- Simple missing values identificaiton and handling
+- CART model with cross-validation and tree visualization
+
 # Table of Contents
 
 - [Table of contents](#table-of-contents)
