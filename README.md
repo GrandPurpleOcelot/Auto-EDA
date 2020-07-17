@@ -67,11 +67,11 @@ report.get_samples()
 get_samples() returns a df concatenated from head + random samples + tail of the dataset.
 
 <div align="center">
-  <img src="images/get_samples.svg" />
+  <img src="images/histogram.png" />
 </div>
 
 ```python
->>>report.get_overview()
+>>> report.get_overview()
 
 Number of Variables: 303
 Number of Observations: 14
