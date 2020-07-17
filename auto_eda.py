@@ -419,6 +419,7 @@ Use argument missing_tag for encoded missing values''')
             target = self.target_variable
         if target is None:
             print("Please specify a categorical column as x-axis using 'target' argument.")
+            return
         if self.df[target].dtype not in CATEGORICAL_TYPES:
             print("Target must be a categorical column.")
         else:
@@ -440,6 +441,7 @@ Use argument missing_tag for encoded missing values''')
             target = self.target_variable
         if target == None:
             print("Please specify a categorical column as x-axis using 'target' argument")
+            return
         if self.df[target].dtype not in CATEGORICAL_TYPES:
             print("Target must be a categorical column.")
         else:
@@ -485,6 +487,7 @@ Use argument missing_tag for encoded missing values''')
             target = self.target_variable
         if target == None:
             print("Please specify a categorical column as x-axis using 'target' argument")
+            return
         if self.df[target].dtype not in CATEGORICAL_TYPES:
             print("Target must be a categorical column.")
         else:
