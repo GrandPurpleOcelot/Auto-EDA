@@ -42,6 +42,12 @@ Auto_EDA is a python library that automates common tasks in your exploratory dat
 from auto_eda import *;
 ```
 
+Initiate a class instance with input dataframe:
+
+```python
+
+```
+
 ### Descriptive Statistics
 
 ####  Dataset Overview
