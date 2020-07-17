@@ -42,15 +42,43 @@ Auto_EDA is a python library that automates common tasks in your exploratory dat
 from auto_eda import *;
 ```
 
+Initiate a class instance with input dataframe:
+
+```python
+heart = pd.read_csv('datasets/heart.csv')
+heart['target'] = np.where(heart['target'] == 1, 'has disease', 'no disease')
+
+report = auto_eda(heart, target_variable = 'target')
+```
+
+The available parameters are:
+
+- `df`: the input pandas dataframe.
+- `target_variable`: the target variable that Auto_EDA will focus on.
+
 ### Descriptive Statistics
 
 ####  Dataset Overview
 
-1. Number of variables
+```python
+report.get_samples()
+```
 
-2. Number of observations
+get_samples() returns a df concatenated from head + random samples + tail of the dataset.
 
-3. Memory usage
+<div align="center">
+  <img src="images/histogram.png" />
+</div>
+
+```python
+>>> report.get_overview()
+
+Number of Variables: 303
+Number of Observations: 14
+Memory Usage: 0.052106 Mb
+```
+get_samples() returns number of variables, observations, and memory usage.
+
 
 ### Missing Values
 
