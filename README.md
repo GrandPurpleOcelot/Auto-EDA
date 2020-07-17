@@ -71,13 +71,14 @@ get_samples() returns a df concatenated from head + random samples + tail of the
 </div>
 
 ```python
-report.get_overview()
+>>>report.get_overview()
+
+Number of Variables: 303
+Number of Observations: 14
+Memory Usage: 0.052106 Mb
 ```
 get_samples() returns number of variables, observations, and memory usage.
 
-<div align="center">
-  <img src="images/get_overview.svg" />
-</div>
 
 ### Missing Values
 
