@@ -632,8 +632,8 @@ Use argument missing_tag for encoded missing values''')
                                target_name = target,
                                feature_names = feature_names,
                                fancy=False)  
-
-                return viz
+                viz.view()
+                # return viz
                         
             
 
