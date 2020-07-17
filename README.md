@@ -207,7 +207,7 @@ User can specify a target variable for classification/regression task using Clas
 1. Classification Report (train on 75% of data, test on 25%)
 
 ```python
-report.tree_model()
+report.tree_model(max_depth = 4)
 
 Classification Report on 25% of Testing Data:
               precision    recall  f1-score   support
@@ -228,4 +228,8 @@ weighted avg       0.84      0.84      0.84        76
 </div>
 
 3. Decision tree visualization with Dtreeviz
+
+<div align="center">
+  <img src="images/tree_model1.png" />
+</div>
 
