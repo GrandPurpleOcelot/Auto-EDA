@@ -5,23 +5,43 @@
 
 ## Introduction
 
-Throughout my data science journey, I have learned that it is a good practice to understand the data first and try to gather as many insights from it. Exploratory Data Analysis (EDA) is all about making sense of data in hand, before getting dirty with machine learning and sophiticated algorithm. 
+Throughout my data science journey, I have learned that it is a good practice to understand the data first and try to gather as many insights from it. Exploratory Data Analysis (EDA) is all about making sense of data in hand, before getting dirty with machine learning and sophisticated algorithm. 
 
-While there are plenty of Python libraries that can help create beautiful and complex visualizations, I often find myself starting with the most simplistic analyses: count plot, histogram, scatter plot, boxplot, etc. This initial EDA workflow is very similar for each new data set. But unfortunately, they are tedious. Converting to correct data types, selecting the right variable type for the right plot, itterate through all possible variable combinations, adjusting plot asthetic and labels, etc. These are the tasks I would love to do... once. As someone that does not find great joy in completing repetitive tasks, I set out to build a tool that allow me to me as lazy as possible.
+While there are plenty of Python libraries that can help create beautiful and complex visualizations, I often find myself starting with the most simplistic analyses: count plot, histogram, scatter plot, boxplot, etc. This initial EDA workflow is very similar for each new data set. But unfortunately, they are tedious. Converting to correct data types, selecting the right variable type for the right plot, iterate through all possible variable combinations, adjusting plot aesthetics and labels, etc. These are the tasks I would love to do... once. As someone that does not find great joy in completing repetitive tasks, I set out to build a tool that allows me to be as lazy as possible.
 
 ## Description
-Auto_EDA is a python library that automates common tasks in your exploratory data analysis. This includes missing values visualization, missing values handling, variable types handling, predictive modeling and a variety of univariate and bivariate graphs. The goal is to provide a fast and effective tool for discovering insights, so you can quickly move on machine learning model.
+Auto_EDA is a python library that automates common tasks in your exploratory data analysis. This includes missing values visualization, missing values handling, variable types handling, predictive modeling, and a variety of univariate and bivariate graphs. The goal is to provide a fast and effective tool for discovering insights, so you can quickly move on to the machine learning model.
 
-## Table of Contents
+### Features
+
+- Smart data type conversion
+- Automatic graph discovery
+- Simple missing values identificaiton and handling
+- CART model with cross-validation and tree visualization
+
+# Table of Contents
 
 - [Table of contents](#table-of-contents)
 - [Installation](#installation)
 - [Dataset Overview](#dataset-overview)
-- [Missing Values Handling](#Missing-Values)
+- [Missing Values](#Missing-Values)
+  - [Identify Missing Values](#Identify-Missing-Values)
+  - [Handle Missing Values](#Handling-missing-values)
 - [Variable Types Handling](#Variable-Types)
+  - [Identify data types](#Identify-data-types-from-Pandas)
+  - [Type conversions](#Handle-suggested-type-conversions)
 - [Visualization](#Visualization)
   - [Univariate plots](#Univariate-plots)
+    - [Histogram](#Histogram)
+    - [Count Plots](#Count-plots)
+    - [Word Cloud](#Word-cloud)
   - [Bivariate plots](#Bivariate-plots)
+    - [Correlation plots](#Correlation-plots)
+    - [Principal Component Analysis](#Principal-Component-Analysis)
+    - [Box Plots](#Box-plots)
+    - [Relative Frequency Plots](#Relative-frequency-plots)
+    - [Correspondence Analysis](#Correspondence-Analysis)
+    - [Trend plot](#Trend-plot)
 - [Decision Tree Visualizer](#Statistical-Modeling)
   
 
@@ -56,9 +76,7 @@ The available parameters are:
 - `df`: the input pandas dataframe.
 - `target_variable`: the target variable that Auto_EDA will focus on.
 
-### Descriptive Statistics
-
-####  Dataset Overview
+##  Dataset Overview
 
 ```python
 report.get_samples()
@@ -80,12 +98,12 @@ Memory Usage: 0.052106 Mb
 get_samples() returns number of variables, observations, and memory usage.
 
 
-### Missing Values
+## Missing Values
 
-1. Visualize missing values using heatmap
+### Identify Missing Values
 
 ```python
-report.get_missings(missing_tag=-200)
+report.get_missings(missing_tag= '?')
 ```
 
 <div align="center">
@@ -100,7 +118,12 @@ report.get_missings(missing_tag=-200)
   <img src="images/get_missings2.png" />
 </div>
 
-2. Handling missing values
+The available parameters are:
+
+- `missing_tag`: Sometimes missing values are denoted with a number or string (eg. '?'), enter the missing tag to replace them with NAs
+
+
+### Handling missing values
 
 ```python
 >>> report.handle_missings(strategy = 'deletion', drop_threshold = 0.5)
@@ -109,9 +132,21 @@ Dropped columns: ['NMHC(GT)']
 Number of dropped rows: 2416 --> 25.8% of rows removed
 ```
 
-### Variable Types
+The available parameters are:
 
-1. Print out current data types from Pandas
+- `strategy`: select a strategy to handle missing data. Options: 'deletion', 'encode', 'mean_mode'
+
+'deletion': drop variables with > 70% missing (or a different threshold using argument 'drop_threshold') and remove observations that contain at least 1 missing value.
+
+'encode'(Encoding imputation): for numerical variable, encoding missing entries as -999. For categorical variable, encoding missing entries as string "unknown"
+
+'mean_mode'(Mean/mode imputation): for numerial variable, impute the missing entries with the mean. For categorical variable, impute the missing entries with the mode
+
+- `drop_threshold`: if 'deletion' strategy is selected, any column that have fraction of missing values exceed drop_threshold will be dropped. drop_threshold = 1 will keep all columns. Default drop_threshold = 0.7.
+
+## Variable Types
+
+### Identify Data Types
 
 ```python
 report.check_data_type()
@@ -120,7 +155,7 @@ report.check_data_type()
   <img src="images/check_data_type.png" />
 </div>
 
-- Type conversion suggestions: 
+**Type conversion suggestions:**
 
  * String datetime -> datetime
  
@@ -130,7 +165,7 @@ report.check_data_type()
  
  * Maximum cardinality (number of unique == number of observations) -> remove
  
-Execute the suggested type conversions:
+### Handle Suggested Type Conversions:
 
 ```python
 >>> report.change_data_type()
@@ -138,11 +173,13 @@ Execute the suggested type conversions:
 Column Datetime converts to datetime
 ```
 
-### Visualization
+## Visualization
 
-#### Univariate plots
+### Univariate Plots
 
-1. Histogram (for numerical data)
+#### Histogram
+
+Exploratory type: **numerical** data
 
 ```python
 report.histogram()
@@ -156,7 +193,9 @@ The available parameters are:
 
 - `kde`: boolean (default = False).
 
-2. Count plot (for categorical data)
+#### Count Plots
+
+Exploratory type: **categorical** data
 
 ```python
 report.count_plots()
@@ -166,15 +205,16 @@ report.count_plots()
   <img src="images/count_plots.png" />
 </div>
 
-3. World cloud (for text data)
+#### Word Cloud
+Exploratory type: **text** data
 
 Development in progress...
 
-#### Bivariate plots 
+### Bivariate Plots 
 
-User can specify a categorical column for grouping. 
+#### Correlation Plots
 
-1. Correlation plots (heat map and scatter plot): for numerical and numerical data
+Exploratory type: for numerical and numerical data
 
 ```python
 report.correlation()
@@ -195,17 +235,22 @@ report.correlation()
 <div align="center">
   <img src="images/correlation3.png" />
 </div>
-    * Principal Component Analysis
-    
-    ```python
-    report.pca()
-    ```
-    
-   <div align="center">
-      <img src="images/pca.png" />
-    </div>
 
-2. Box plots: for numerical and categorical data
+#### Principal Component Analysis
+
+Exploratory type: **dimensionality reduction**
+    
+```python
+report.pca()
+```
+
+<div align="center">
+  <img src="images/pca.png" />
+</div>
+
+#### Box Plots 
+
+Exploratory type: **numerical** and **categorical** data
 
 ```python
 report.boxplots()
@@ -215,7 +260,9 @@ report.boxplots()
   <img src="images/boxplots.png" />
 </div>
 
-3. Relative frequency plots: for categorical and categorical data
+#### Relative Frequency Plots 
+
+Exploratory type: **categorical** and **categorical** data
 
 ```python
 report.cat_plots()
@@ -224,8 +271,11 @@ report.cat_plots()
 <div align="center">
   <img src="images/cat_plots.png" />
 </div>
-    * Correspondence Analysis
-    
+
+#### Correspondence Analysis
+
+Exploratory type: **categorical** and **categorical** data
+
     ```python
     report.correspondence_analysis()
     ```
@@ -234,9 +284,21 @@ report.cat_plots()
       <img src="images/correspondence_analysis.png" />
    </div>
     
+#### Trend Plot 
 
-4. Trend plot (connected scatterplot): if timeseries data is present
+Exploratory type: **timeseries** data
 
+```python
+report.timeseries_plots(grouper = 'M')
+```
+
+<div align="center">
+  <img src="images/timeseries_plots.png" />
+</div>
+
+The available parameters are:
+
+- `grouper`: aggregate the timeseries with a time interval (default = 'W' for 1 week) using mean. This argument is used to reduce the datetime points we have to plot.
 
 ### Statistical Modeling
 
