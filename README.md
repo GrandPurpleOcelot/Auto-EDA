@@ -12,7 +12,7 @@ While there are plenty of Python libraries that can help create beautiful and co
 ## Description
 Auto_EDA is a python library that automates common tasks in your exploratory data analysis. This includes missing values visualization, missing values handling, variable types handling, predictive modeling and a variety of univariate and bivariate graphs. The goal is to provide a fast and effective tool for discovering insights, so you can quickly move on machine learning model.
 
-## Table of Contents
+# Table of Contents
 
 - [Table of contents](#table-of-contents)
 - [Installation](#installation)
@@ -33,6 +33,7 @@ Auto_EDA is a python library that automates common tasks in your exploratory dat
     - [Principal Component Analysis](#Principal-Component-Analysis)
     - [Box Plots](#Box-plots)
     - [Relative Frequency Plots](#Relative-frequency-plots)
+    - [Correspondence Analysis](#Correspondence-Analysis)
     - [Trend plot](#Trend-plot)
 - [Decision Tree Visualizer](#Statistical-Modeling)
   
@@ -68,9 +69,7 @@ The available parameters are:
 - `df`: the input pandas dataframe.
 - `target_variable`: the target variable that Auto_EDA will focus on.
 
-### Descriptive Statistics
-
-####  Dataset Overview
+##  Dataset Overview
 
 ```python
 report.get_samples()
@@ -92,9 +91,9 @@ Memory Usage: 0.052106 Mb
 get_samples() returns number of variables, observations, and memory usage.
 
 
-### Missing Values
+## Missing Values
 
-#### Identify Missing Values
+### Identify Missing Values
 
 ```python
 report.get_missings(missing_tag=-200)
@@ -112,7 +111,7 @@ report.get_missings(missing_tag=-200)
   <img src="images/get_missings2.png" />
 </div>
 
-#### Handling missing values
+### Handling missing values
 
 ```python
 >>> report.handle_missings(strategy = 'deletion', drop_threshold = 0.5)
@@ -121,9 +120,9 @@ Dropped columns: ['NMHC(GT)']
 Number of dropped rows: 2416 --> 25.8% of rows removed
 ```
 
-### Variable Types
+## Variable Types
 
-#### Identify data types from Pandas
+### Identify Data Types
 
 ```python
 report.check_data_type()
@@ -142,7 +141,7 @@ report.check_data_type()
  
  * Maximum cardinality (number of unique == number of observations) -> remove
  
-#### Handle suggested type conversions:
+### Handle Suggested Type Conversions:
 
 ```python
 >>> report.change_data_type()
@@ -150,11 +149,11 @@ report.check_data_type()
 Column Datetime converts to datetime
 ```
 
-### Visualization
+## Visualization
 
-#### Univariate plots
+### Univariate Plots
 
-##### Histogram
+#### Histogram
 
 Exploratory type: **numerical** data
 
@@ -170,7 +169,7 @@ The available parameters are:
 
 - `kde`: boolean (default = False).
 
-##### Count plots
+#### Count Plots
 
 Exploratory type: **categorical** data
 
@@ -182,16 +181,16 @@ report.count_plots()
   <img src="images/count_plots.png" />
 </div>
 
-##### Word cloud
+#### Word Cloud
 Exploratory type: **text** data
 
 Development in progress...
 
-#### Bivariate plots 
+### Bivariate Plots 
 
 User can specify a categorical column for grouping. 
 
-##### Correlation plots
+#### Correlation Plots
 
 Exploratory type: for numerical and numerical data
 
@@ -215,7 +214,7 @@ report.correlation()
   <img src="images/correlation3.png" />
 </div>
 
-##### Principal Component Analysis
+#### Principal Component Analysis
 
 Exploratory type: **dimensionality reduction**
     
@@ -227,7 +226,7 @@ report.pca()
   <img src="images/pca.png" />
 </div>
 
-##### Box plots 
+#### Box Plots 
 
 Exploratory type: **numerical** and **categorical** data
 
@@ -239,7 +238,7 @@ report.boxplots()
   <img src="images/boxplots.png" />
 </div>
 
-##### Relative frequency plots 
+#### Relative Frequency Plots 
 
 Exploratory type: **categorical** and **categorical** data
 
@@ -250,8 +249,11 @@ report.cat_plots()
 <div align="center">
   <img src="images/cat_plots.png" />
 </div>
-    * Correspondence Analysis
-    
+
+#### Correspondence Analysis
+
+Exploratory type: **categorical** and **categorical** data
+
     ```python
     report.correspondence_analysis()
     ```
@@ -260,7 +262,7 @@ report.cat_plots()
       <img src="images/correspondence_analysis.png" />
    </div>
     
-##### Trend plot 
+#### Trend Plot 
 
 Exploratory type: **timeseries** data
 
