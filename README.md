@@ -10,7 +10,7 @@ Throughout my data science journey, I have learned that it is a good practice to
 While there are plenty of Python libraries that can help create beautiful and complex visualizations, I often find myself starting with the most simplistic analyses: count plot, histogram, scatter plot, boxplot, etc. This initial EDA workflow is very similar for each new data set. But unfortunately, they are tedious. Converting to correct data types, selecting the right variable type for the right plot, iterate through all possible variable combinations, adjusting plot aesthetics and labels, etc. These are the tasks I would love to do... once. As someone that does not find great joy in completing repetitive tasks, I set out to build a tool that allows me to be as lazy as possible.
 
 ## Description
-Auto_EDA is a python library that automates common tasks in your exploratory data analysis. This includes missing values visualization, missing values handling, variable types handling, predictive modeling, and a variety of univariate and bivariate graphs. The goal is to provide a fast and effective tool for discovering insights, so you can quickly move on to the machine learning model.
+Majora is a python library that automates common tasks in your exploratory data analysis. This includes missing values visualization, missing values handling, variable types handling, predictive modeling, and a variety of univariate and bivariate graphs. The goal is to provide a fast and effective tool for discovering insights, so you can quickly move on to the machine learning model.
 
 ### Features
 
@@ -47,7 +47,7 @@ Auto_EDA is a python library that automates common tasks in your exploratory dat
 
 ## Installation
 
-:warning: Auto_EDA is only compatible with **Python 3**.
+:warning: Majora is only compatible with **Python 3**.
 
 :warning: Decision Tree visualizer requires [graphviz](https://github.com/parrt/dtreeviz).
 
@@ -59,7 +59,7 @@ Auto_EDA is a python library that automates common tasks in your exploratory dat
 ## Usage
 
 ```python
-from auto_eda import *;
+from majora import *;
 ```
 
 Initiate a class instance with input dataframe:
@@ -68,7 +68,7 @@ Initiate a class instance with input dataframe:
 heart = pd.read_csv('datasets/heart.csv')
 heart['target'] = np.where(heart['target'] == 1, 'has disease', 'no disease')
 
-report = auto_eda(heart, target_variable = 'target')
+report = majora(heart, target_variable = 'target')
 ```
 
 The available parameters are:
