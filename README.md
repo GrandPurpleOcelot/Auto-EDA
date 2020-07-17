@@ -35,7 +35,9 @@ from auto_eda import *;
 - [Installation](#installation)
 - [Dataset Overview](#dataset-overview)
 - [Missing Values Handling](#Missing-Values)
-- [Variable Types Handling](#Variable Types)
+- [Variable Types Handling](#Variable-Types)
+- [Univariate plots](#Univariate-plots)
+
 ### Descriptive Statistics
 
 ####  Dataset Overview
