@@ -31,6 +31,9 @@ from auto_eda import *;
 
 ## Table of Contents
 
+- [Table of contents](#table-of-contents)
+- [Installation](#installation)
+
 ### Descriptive Statistics
 
 ####  Dataset Overview
