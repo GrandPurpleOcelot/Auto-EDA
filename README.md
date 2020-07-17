@@ -17,10 +17,15 @@ Auto_EDA is a python library that automates common tasks in your exploratory dat
 - [Table of contents](#table-of-contents)
 - [Installation](#installation)
 - [Dataset Overview](#dataset-overview)
-- [Missing Values Handling](#Missing-Values)
+- [Missing Values](#Missing-Values)
+  - [Identify Missing Values](#Identify-Missing-Values)
+  - [Handle Missing Values](#Handling-missing-values)
 - [Variable Types Handling](#Variable-Types)
+  - [Identify data types](#Identify-data-types-from-Pandas)
+  - [Type conversions](#Handle-suggested-type-conversions)
 - [Visualization](#Visualization)
   - [Univariate plots](#Univariate-plots)
+    - [Histogram](#Histogram)
   - [Bivariate plots](#Bivariate-plots)
 - [Decision Tree Visualizer](#Statistical-Modeling)
   
@@ -82,7 +87,7 @@ get_samples() returns number of variables, observations, and memory usage.
 
 ### Missing Values
 
-1. Visualize missing values using heatmap
+#### Identify Missing Values
 
 ```python
 report.get_missings(missing_tag=-200)
@@ -100,7 +105,7 @@ report.get_missings(missing_tag=-200)
   <img src="images/get_missings2.png" />
 </div>
 
-2. Handling missing values
+#### Handling missing values
 
 ```python
 >>> report.handle_missings(strategy = 'deletion', drop_threshold = 0.5)
@@ -111,7 +116,7 @@ Number of dropped rows: 2416 --> 25.8% of rows removed
 
 ### Variable Types
 
-1. Print out current data types from Pandas
+#### Identify data types from Pandas
 
 ```python
 report.check_data_type()
@@ -130,7 +135,7 @@ report.check_data_type()
  
  * Maximum cardinality (number of unique == number of observations) -> remove
  
-Execute the suggested type conversions:
+#### Handle suggested type conversions:
 
 ```python
 >>> report.change_data_type()
@@ -142,7 +147,9 @@ Column Datetime converts to datetime
 
 #### Univariate plots
 
-1. Histogram (for numerical data)
+##### Histogram
+
+Exploratory type: **numerical** data
 
 ```python
 report.histogram()
@@ -156,7 +163,9 @@ The available parameters are:
 
 - `kde`: boolean (default = False).
 
-2. Count plot (for categorical data)
+##### Count plot
+
+Exploratory type: **categorical** data
 
 ```python
 report.count_plots()
@@ -166,7 +175,8 @@ report.count_plots()
   <img src="images/count_plots.png" />
 </div>
 
-3. World cloud (for text data)
+##### World cloud
+Exploratory type: **text** data
 
 Development in progress...
 
@@ -174,7 +184,9 @@ Development in progress...
 
 User can specify a categorical column for grouping. 
 
-1. Correlation plots (heat map and scatter plot): for numerical and numerical data
+##### Correlation plots
+
+Exploratory type: for numerical and numerical data
 
 ```python
 report.correlation()
@@ -195,17 +207,22 @@ report.correlation()
 <div align="center">
   <img src="images/correlation3.png" />
 </div>
-    * Principal Component Analysis
-    
-    ```python
-    report.pca()
-    ```
-    
-   <div align="center">
-      <img src="images/pca.png" />
-    </div>
 
-2. Box plots: for numerical and categorical data
+##### Principal Component Analysis
+
+Exploratory type: **dimensionality reduction**
+    
+```python
+report.pca()
+```
+
+<div align="center">
+  <img src="images/pca.png" />
+</div>
+
+##### Box plots 
+
+Exploratory type: **numerical** and **categorical** data
 
 ```python
 report.boxplots()
@@ -215,7 +232,9 @@ report.boxplots()
   <img src="images/boxplots.png" />
 </div>
 
-3. Relative frequency plots: for categorical and categorical data
+##### Relative frequency plots 
+
+Exploratory type: **categorical** and **categorical** data
 
 ```python
 report.cat_plots()
@@ -234,9 +253,13 @@ report.cat_plots()
       <img src="images/correspondence_analysis.png" />
    </div>
     
+##### Trend plot 
 
-4. Trend plot (connected scatterplot): if timeseries data is present
+Exploratory type: **timeseries** data
 
+<div align="center">
+  <img src="images/timeseries_plots.png" />
+</div>
 
 ### Statistical Modeling
 
