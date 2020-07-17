@@ -26,7 +26,14 @@ Auto_EDA is a python library that automates common tasks in your exploratory dat
 - [Visualization](#Visualization)
   - [Univariate plots](#Univariate-plots)
     - [Histogram](#Histogram)
+    - [Count Plots](#Count-plots)
+    - [Word Cloud](#Word-cloud)
   - [Bivariate plots](#Bivariate-plots)
+    - [Correlation plots](#Correlation-plots)
+    - [Principal Component Analysis](#Principal-Component-Analysis)
+    - [Box Plots](#Box-plots)
+    - [Relative Frequency Plots](#Relative-frequency-plots)
+    - [Trend plot](#Trend-plot)
 - [Decision Tree Visualizer](#Statistical-Modeling)
   
 
@@ -163,7 +170,7 @@ The available parameters are:
 
 - `kde`: boolean (default = False).
 
-##### Count plot
+##### Count plots
 
 Exploratory type: **categorical** data
 
@@ -175,7 +182,7 @@ report.count_plots()
   <img src="images/count_plots.png" />
 </div>
 
-##### World cloud
+##### Word cloud
 Exploratory type: **text** data
 
 Development in progress...
