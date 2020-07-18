@@ -120,7 +120,7 @@ def background_gradient(s, m, M, cmap='PuBu', low=0, high=0):
     c = [colors.rgb2hex(x) for x in plt.cm.get_cmap(cmap)(normed)]
     return ['background-color: %s' % color for color in c]
 
-class majora():
+class auto_eda():
     def __init__(self, df, target_variable = None):
         self.df = df.copy()
         self.target_variable = target_variable

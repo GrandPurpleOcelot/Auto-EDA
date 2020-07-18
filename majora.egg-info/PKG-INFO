@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: majora
-Version: 0.0.2
+Version: 0.0.3
 Summary: Majora is a python library that automates common tasks in your exploratory data analysis. 
 Home-page: https://github.com/GrandPurpleOcelot/Auto-EDA
 Author: Thien Nghiem
