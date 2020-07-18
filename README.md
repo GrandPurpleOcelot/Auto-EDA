@@ -51,15 +51,15 @@ Majora is a python library that automates common tasks in your exploratory data 
 
 :warning: Decision Tree visualizer requires [graphviz](https://github.com/parrt/dtreeviz).
 
-**Install Via GitHub**
+**Install Via PIP**
 
 ```sh
-> pip install git+https://github.com/GrandPurpleOcelot/Auto-EDA 
+> pip install majora 
 ```
 ## Usage
 
 ```python
-from majora import *;
+from majora import majora
 ```
 
 Initiate a class instance with input dataframe:
@@ -68,7 +68,7 @@ Initiate a class instance with input dataframe:
 heart = pd.read_csv('datasets/heart.csv')
 heart['target'] = np.where(heart['target'] == 1, 'has disease', 'no disease')
 
-report = majora(heart, target_variable = 'target')
+report = majora.auto_eda(heart, target_variable = 'target')
 ```
 
 The available parameters are:
