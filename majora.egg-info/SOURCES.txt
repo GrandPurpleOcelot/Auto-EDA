@@ -5,4 +5,5 @@ majora/majora.py
 majora.egg-info/PKG-INFO
 majora.egg-info/SOURCES.txt
 majora.egg-info/dependency_links.txt
+majora.egg-info/requires.txt
 majora.egg-info/top_level.txt
